@@ -126,12 +126,12 @@ async function main() {
 
     
     // 🧠 Query the agent's AI
-    const respuesta = await bot.onMessage({
+    const response = await bot.onMessage({
       agentId: agentId, 
       question: "What features does Plazbot have?"
     });
 
-    // console.log("💬 Respuesta de la IA:", respuesta);
+    console.log("💬 Respuesta de la IA:", response);
 
     console.log("✅ Success.");
 
