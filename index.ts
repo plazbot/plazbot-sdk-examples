@@ -1,4 +1,4 @@
-import { Agent, Portal } from 'plazbot';
+import { Agent, Portal, Message } from 'plazbot';
 
 const bot = new Agent({
   workspaceId: "[YOUR_WORKSPACE_ID]",
@@ -7,6 +7,12 @@ const bot = new Agent({
 });
 
 const portal = new Portal({
+  workspaceId: "[YOUR_WORKSPACE_ID]",
+  apiKey: "[API_KEY]",
+  zone: "LA" // zone: "EU" // For Europe
+});
+
+const message = new Message({
   workspaceId: "[YOUR_WORKSPACE_ID]",
   apiKey: "[API_KEY]",
   zone: "LA" // zone: "EU" // For Europe
@@ -124,14 +130,30 @@ async function main() {
     // Delete portal
     await portal.deletePortal(portalId);
 
+    const sessionId = crypto.randomUUID();
     
     // 🧠 Query the agent's AI
     const response = await bot.onMessage({
       agentId: agentId, 
-      question: "What features does Plazbot have?"
+      question: "What features does Plazbot have?",
+      sessionId: sessionId
     });
 
     console.log("💬 Respuesta de la IA:", response);
+
+
+    // Whatsapp message
+    const whatsapp = await message.onWhatsappMessage({
+      message: "What features does Plazbot have?",
+      to: "52123456789" //"sessionId12345" // sessionId
+    });
+     console.log("💬 Respuesta de la IA:", whatsapp);
+
+    // Send a template message
+    const plantilla = await message.onConversation({
+      to: "52123456789", 
+      template: "welcome_plazbot"
+    });
 
     console.log("✅ Success.");
 

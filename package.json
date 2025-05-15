@@ -21,6 +21,6 @@
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "plazbot": "^1.0.4"
+    "plazbot": "^1.0.6"
   }
 }
