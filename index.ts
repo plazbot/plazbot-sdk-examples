@@ -52,12 +52,9 @@ async function main() {
 
     const agentId = agent.agentId;
 
-
     //Add examples of the agent  
     await bot.addExample({ id: agentId, example: "Where are they located?", color: "green" });
     await bot.addExample({ id: agentId, example: "What guarantees do you offer?", color: "blue" });
-
-
 
     // Create the portal
     const portalCreated = await portal.addPortal({
@@ -139,21 +136,35 @@ async function main() {
       sessionId: sessionId
     });
 
-    console.log("💬 Respuesta de la IA:", response);
-
+    console.log("💬 IA Response:", response);
 
     // Whatsapp message
     const whatsapp = await message.onWhatsappMessage({
       message: "What features does Plazbot have?",
       to: "52123456789" //"sessionId12345" // sessionId
     });
-     console.log("💬 Respuesta de la IA:", whatsapp);
+     console.log("💬 IA Response:", whatsapp);
 
     // Send a template message
     const plantilla = await message.onConversation({
       to: "52123456789", 
       template: "welcome_plazbot"
     });
+
+    await message.registerWebhook({
+      number: '51966446311',
+      webhookUrl: 'https://hook.us1.make.com/xxxxxxxx'
+    });
+
+
+    await message.deleteWebhook({
+      number: "51966446311"
+    });
+
+
+    const result = await bot.enableWidget({ id: agentId, enable: true });
+    console.log("🤖 Widget State:", result);
+
 
     console.log("✅ Success.");
 
