@@ -1,4 +1,4 @@
-# 🚀 Plazbot SDK Examples
+## 🚀 Plazbot SDK Examples
 
 AI Agents and WhatsApp integration for developers using the Plazbot SDK.
 
@@ -465,7 +465,7 @@ For partnerships, business, or sales inquiries:
 📩 [sales@plazbot.com](mailto:sales@plazbot.com)
 
 Join our community and help us shape what comes next:  
-[![Join Discord](https://img.shields.io/badge/Discord-Join-blue?logo=discord&style=for-the-badge)](https://discord.gg/VrxHbj4h)
+[![Join Discord](https://img.shields.io/badge/Discord-Join-blue?logo=discord&style=for-the-badge)](https://discord.gg/Y8f38MxF)
 [![Follow on Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?logo=twitter&style=for-the-badge)](https://twitter.com/plazbotia)
 [![Plazbot Dev Docs](https://img.shields.io/badge/Developer%20Docs-plazbot.com-blue?style=for-the-badge&logo=openapi)](https://developers.plazbot.com)
 
