@@ -402,8 +402,8 @@ You can find both inside the [Plazbot Dashboard](https://www.plazbot.com) after 
 - Copy your `API Key` and `Workspace ID`
 
 Check out our documentation to learn how to create an account and retrieve your API Key and Workspace ID.
-👉 [[(Developers)](https://developers.plazbot.com/)]
-👉 [[(Crear una Cuenta)](https://plazbot.featurebase.app/en/help/articles/2906889-creacion-de-cuenta)]
+👉 [[(Developers)](https://docs.plazbot.com/sdk/introduccion)]
+👉 [[(Crear una Cuenta)](https://docs.plazbot.com/guides/primeros-pasos/creacion-cuenta)]
 
 ---
 
@@ -467,7 +467,7 @@ For partnerships, business, or sales inquiries:
 Join our community and help us shape what comes next:  
 [![Join Discord](https://img.shields.io/badge/Discord-Join-blue?logo=discord&style=for-the-badge)](https://discord.gg/Y8f38MxF)
 [![Follow on Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?logo=twitter&style=for-the-badge)](https://twitter.com/plazbotia)
-[![Plazbot Dev Docs](https://img.shields.io/badge/Developer%20Docs-plazbot.com-blue?style=for-the-badge&logo=openapi)](https://developers.plazbot.com)
+[![Plazbot Dev Docs](https://img.shields.io/badge/Developer%20Docs-plazbot.com-blue?style=for-the-badge&logo=openapi)](https://docs.plazbot.com/api-reference/introduction)
 
 
 Together, let’s simplify and accelerate how AI gets delivered to the world.

@@ -33,11 +33,10 @@ async function main() {
     - General platform information: www.plazbot.com
     - Twitter: https://twitter.com/plazbotia
     - LinkedIn: https://www.linkedin.com/company/plazbotcrm
-    - Blog: https://www.plazbot.com/blog
     - Discord: https://discord.gg/VrxHbj4h
-    - Development Roadmap: https://plazbot.featurebase.app/en/roadmap
-    - Changelog: https://plazbot.featurebase.app/en/changelog
-    - Documentation: https://plazbot.featurebase.app/en/help
+    - Development Roadmap: https://feedback.plazbot.com/roadmap
+    - Changelog: https://docs.plazbot.com/changelog/platform
+    - Documentation: https://docs.plazbot.com/
     .`;
 
     const agent = await bot.addAgent({
