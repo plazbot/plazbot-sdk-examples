@@ -34,7 +34,7 @@ async function main() {
     - Twitter: https://twitter.com/plazbotia
     - LinkedIn: https://www.linkedin.com/company/plazbotcrm
     - Discord: https://discord.gg/VrxHbj4h
-    - Development Roadmap: https://feedback.plazbot.com/roadmap
+    - Development Roadmap: https://plazbot.canny.io/
     - Changelog: https://docs.plazbot.com/changelog/platform
     - Documentation: https://docs.plazbot.com/
     .`;

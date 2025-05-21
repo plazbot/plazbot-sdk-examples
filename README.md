@@ -112,7 +112,7 @@ Remember that the prompt is a text variable that you can send from any of your s
     - LinkedIn: https://www.linkedin.com/company/plazbotcrm
     - Blog: https://www.plazbot.com/blog
     - Discord: https://discord.gg/VrxHbj4h
-    - Development Roadmap: https://plazbot.featurebase.app/en/roadmap
+    - Development Roadmap: https://plazbot.canny.io/sdk-requests
     - Changelog: https://plazbot.featurebase.app/en/changelog
     - Documentation: https://plazbot.featurebase.app/en/help
     .`;
