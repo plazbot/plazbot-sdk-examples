@@ -33,7 +33,7 @@ async function main() {
     - General platform information: www.plazbot.com
     - Twitter: https://twitter.com/plazbotia
     - LinkedIn: https://www.linkedin.com/company/plazbotcrm
-    - Discord: https://discord.gg/VrxHbj4h
+    - Discord: https://discord.gg/SgyAtrwzp7
     - Development Roadmap: https://plazbot.canny.io/
     - Changelog: https://docs.plazbot.com/changelog/platform
     - Documentation: https://docs.plazbot.com/
