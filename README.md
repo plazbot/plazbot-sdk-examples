@@ -488,8 +488,6 @@ Check out our documentation to learn how to create an account and retrieve your 
 
 This API allows you to upload files (PDF, DOC, DOCX) and connect them to your AI agent so their content can be processed using Retrieval-Augmented Generation (RAG). Files are analyzed and split into vectorized fragments that can be retrieved during conversation.
 
----
-
 ### ✅ `addFile`
 
 Uploads a file and links it to an AI agent. The file content will be processed and stored as knowledge fragments.
