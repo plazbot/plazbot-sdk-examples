@@ -1,6 +1,6 @@
 ## 🚀 Plazbot SDK Examples
 
-AI Agents and WhatsApp integration for developers using the Plazbot SDK.
+Create your AI agents extremely easily, connect them to your files and your prompt, and deploy them wherever you want, whether it's WhatsApp or our tools.
 
 ---
 
@@ -30,14 +30,12 @@ The SDK is designed for developers who want to ship intelligent agents fast — 
 
 The Plazbot SDK is being developed with a RAG (Retrieval-Augmented Generation) architecture, allowing developers to combine:
 
-- Uploaded files (PDFs, documents, etc.)
 - External services via APIs
 - Custom prompts configured in the agent
 
 Our orchestrator will intelligently decide the best source of information to respond to each user message.
 
 Roadmap:
-- Files for AI Agent
 - APIs for AI Agent
 
 ---
@@ -78,46 +76,80 @@ const message = new Message({
 
 ### **Agent Methods**
 
-### Add Agent
+### Add/Update Agent
 The agent is the most important part of the SDK. Here, you'll be able to create AI agents with certain characteristics and deploy them across different channels, whether it's the AI ​​Portal, Widget, or WhatsApp. You can also use our agent in any of your internal business tools, if you wish.
 
 ```ts
-    const agent = await bot.addAgent({
-      name: "Sales Plazbot",
-      prompt: promptServicioCliente,
-      buffer: 5,
-      zone: "LA",
-      color: "orange", // 'orange' | 'blue' | 'green' | 'gray' | 'white';
-      question: "¿How can I help you?",
-      description: "Plazbot Sales and Customer Service Agent",
-    });
-
+    const agent = await bot.addAgent(config);
     const agentId = agent.agentId;
 ```
-Remember that the prompt is a text variable that you can send from any of your software and use it to deploy AI agents.
 
 ```ts
-    const promptServicioCliente = `
-    You are the Customer Service and Sales Agent at Plazbot. The goal is for you to always respond in a friendly manner, using emoticons, but not too many, just subtly based on the information I'm about to provide. Please don't answer too long. Be precise, but also provide clear information.
+    const agentUpdated = await bot.updateAgent(`agentId`, config);
+```
+To work with the agents, there is a JSON file that is the initial agent configurator which has the following structure. It's not necessary to fill out the entire file, but you can configure your agent however you like.
 
-    Plazbot is a startup with the sole purpose of providing simple and extremely easy ways to create AI Agents for WhatsApp, AI Search Portals, and also helping programmers create AI Agents to integrate their tools with WhatsApp and Artificial Intelligence.
+You can train the agent however you need, either through our configurator or if you want to configure everything in a single prompt; it's not necessary to use all the fields in the config file.
 
-    Plazbot is a startup founded in Peru. Its CEO, Kristian García, founded it in 2021, and over the past few years, we've focused on creating AI Agents and Chatbots for WhatsApp.
+We're also providing a basic file for you to use in the repository.
 
-    We are located in Peru and Spain. The company was also founded in the United States under the name Plazbot LLC.
-
-    The information we provide is as follows, based on our links:
-    - General platform information: www.plazbot.com
-    - Twitter: https://twitter.com/plazbotia
-    - LinkedIn: https://www.linkedin.com/company/plazbotcrm
-    - Blog: https://www.plazbot.com/blog
-    - Discord: https://discord.gg/VrxHbj4h
-    - Development Roadmap: https://plazbot.canny.io/sdk-requests
-    - Changelog: https://plazbot.featurebase.app/en/changelog
-    - Documentation: https://plazbot.featurebase.app/en/help
-    .`;
+```json
+  {
+    "name": "Sales Plazbot 3",
+    "description": "Virtual Agent IA assistant of the Dental Clinic Sonrisas",
+    "prompt": "",
+    "zone": "LA",
+    "buffer": 5,
+    "color": "blue",
+    "question": "How can I help you today?",
+    "timezone": "America/Lima",
+    "tags": [
+      "health",
+      "dentistry",
+      "ia",
+      "plazbot"
+    ],
+    "examples": [
+      { "value": "How to be a partner??", "color": "green" },
+      { "value": "Benefits of being members?", "color": "blue" }
+    ],
+    "instructions": {
+      "tone": "professional",
+      "style": "short answers",
+      "personality": "friendly",
+      "objective": "help with clarity",
+      "language": "es-419",
+      "emojis": false,
+      "preferredFormat": "plain text",
+      "maxWords": 80,
+      "avoidTopics": [
+        "laboratory costs",
+        "external claims"
+      ],
+      "respondOnlyIfKnows": true,
+      "maintainToneBetweenMessages": true,
+      "greeting": "Hello, I am Maximo"
+    },
+    "person": {
+      "name": "Maximo",
+      "role": "Virtual customer service assistant",
+      "speaksInFirstPerson": true,
+      "isHuman": false
+    },
+    "fallbacks": {
+      "noAnswer": "Sorry, I don't have information on that topic.",
+      "serviceError": "There was a problem processing your request. Please try again later.",
+      "doNotUnderstand": "Could you please repeat it in another way?"
+    },
+    "rules": {
+      "doNotMentionPrices": false,
+      "doNotDiagnose": true,
+      "doNotRespondOutsideHours": "Our hours are Monday to Saturday, from 8am to 6pm."
+    }
+  }
 ```
 **AI Agent Fields**
+👉🏼 The JSON obeys a preconfigured schema, so the field names and types must be respected.
 
 | Name            | Description |
 |-----------------|-------------|
@@ -128,21 +160,50 @@ Remember that the prompt is a text variable that you can send from any of your s
 | question        | The Agent's main question, this question is the one that appears in the middle of the portal and also when you install the widget. |
 | description     | AI Agent Description |
 | zone            | The zone is a very important factor; it must match the zone in which the account is created. It can be of two types: LA /EU (Latam/Europe). |
+| timezone        | Field to define the agent's time zone, this is important if you want your agent to work with Business Hours and know how to respond. [TimeZone Formats](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) |
+| Examples        | Adds a quick reply example to the agent. Maximum: 5. |
+| Tags            | Tags are for when you have many agents within the company and can be classified. |
+| Tags            | Tags are for when you have many agents within the company and can be classified. |
 
-### Add Example
-Adds a quick reply example to the agent. Maximum: 5.
+| Field                                | Description |
+|--------------------------------------|-------------|
+| instructions.tone                    | General tone of the agent. Common values: `professional`, `friendly`, `serious`, etc. |
+| instructions.style                   | Preferred answer style. Examples: `short answers`, `detailed`, `bulleted`, etc. |
+| instructions.personality             | Personality of the agent. Example: `friendly`, `curious`, `formal`, etc. |
+| instructions.objective               | Objective behind the agent’s answers. E.g., `help with clarity`, `provide fast info`. |
+| instructions.language                | Language code used for answers (e.g., `es-419`, `en-US`). |
+| instructions.emojis                  | Boolean flag to allow emoji usage (`true` or `false`). |
+| instructions.preferredFormat         | Format for answers: `plain text` or `markdown`. |
+| instructions.maxWords                | Maximum number of words allowed per response. Integer value. |
+| instructions.avoidTopics             | List of forbidden topics (array of strings). |
+| instructions.respondOnlyIfKnows      | If true, agent only answers when it knows the answer confidently. |
+| instructions.maintainToneBetweenMessages | Ensures tone is consistent across all responses. |
+| instructions.greeting                | Initial greeting message the agent should use. |
+| person.name                          | Name used by the agent when referring to itself. |
+| person.role                          | The role or title that the agent presents (e.g., `Virtual Assistant`). |
+| person.speaksInFirstPerson           | If `true`, agent will speak in first person (e.g., "I can help you..."). |
+| person.isHuman                       | If `false`, the agent identifies as an AI, not a human. |
+| fallbacks.noAnswer                   | Response used when the agent doesn’t have information about a topic. |
+| fallbacks.serviceError               | Response used when something goes wrong (e.g., external API failure). |
+| fallbacks.doNotUnderstand            | Response used when the agent cannot understand the user's question. |
+| rules.doNotMentionPrices             | Prevents the agent from discussing prices. Boolean value. |
+| rules.doNotDiagnose                  | If true, disables medical/technical diagnosis by the agent. |
+| rules.doNotRespondOutsideHours       | Business hours in plain text (e.g., `"Monday to Friday 9am to 6pm"`). Agent may decline to respond outside of these hours. **Work with `timezone` field**. |
 
-```ts
-    await bot.addExample({ id: agentId, example: "Where are they located?", color: "green" });
-    await bot.addExample({ id: agentId, example: "What guarantees do you offer?", color: "blue" });
-```
+### 🌐 Language Codes for AI Agent
 
-### Clear Examples
-Removes all examples associated with the specified agent.
-
-```ts
-    await bot.clearExamples(agentId);
-```
+| Value     | Meaning                     |
+|-----------|-----------------------------|
+| `es`      | General Spanish             |
+| `es-419`  | Neutral Latin American Spanish |
+| `es-ES`   | Spanish (Spain)             |
+| `en`      | General English             |
+| `en-US`   | English (United States)     |
+| `en-GB`   | English (United Kingdom)    |
+| `fr`      | General French              |
+| `fr-FR`   | French (France)             |
+| `pt-BR`   | Portuguese (Brazil)         |
+| `de`      | German                      |
 
 ### Get Agents
 Returns all agents within the workspace.
@@ -158,19 +219,6 @@ Fetches details of a specific agent by ID.
 ```ts
     const agentById = await bot.getAgentById({ id: agentId });
     console.log("📌 Agent by ID:", agentById);
-```
-
-
-### Update Agent
-Updates agent settings like color, buffer, prompt, etc.
-
-```ts
-    // Update agent 
-    await bot.updateAgent({
-      id: agentId, 
-      buffer: 7,
-      color: 'blue',
-    });
 ```
 
 ### Delete Agent
@@ -333,18 +381,47 @@ Deletes the specified portal.
 ```
 
 ---
+### **Sending Message to AI Agent**
+
+| Field           | Type     | Required | Description |
+|----------------|----------|----------|-------------|
+| `agentId`      | `string` | ✅ Yes    | Unique identifier of the agent. Used to retrieve its configuration and knowledge. |
+| `question`     | `string` | ✅ Yes    | The user's question or message that the AI should respond to. |
+| `sessionId`    | `string` | ✅ Yes    | A unique session ID to maintain context and message history (buffer) for a user conversation. |
+| `file`         | `string` | ❌ No     | Optional URL pointing to an image or PDF file (public access). The content will be extracted and used in the response if relevant. |
+| `multipleAnswers` | `boolean` | ❌ No | If set to `true`, the response will be returned in multiple answer blocks (array) instead of a single string. Ideal for structured responses. |
+
+### 📂 Supported File Types for `onMessage` (OCR)
+
+| File Type        | Supported | Notes |
+|------------------|-----------|-------|
+| `.jpg`, `.png`, `.bmp`, `.gif`, `.tiff` | ✅ Yes | Standard image formats |
+| `.pdf`           | ✅ Yes    | Only if the PDF contains **embedded text** or is a **scanned image** |
+| `.docx`, `.xlsx` | ❌ No     | Not supported for OCR processing |
+| `.txt`, `.json`, etc. | ❌ No | Not relevant for OCR extraction |
+
+### Example
+
+```ts
+const response = await bot.onMessage({
+  agentId: "agentId",
+  question: "Can you give me a summary of the new Meta WhatsApp prices?",
+  sessionId: "2aff0c11-434f-4d7c-a325-697128bb8a20",
+  file: "https://.../archivo.pdf", // 
+  multipleAnswers: true // Optional
+});
+
+console.log("💬 IA Response:", respuesta);
+```
+----
 
 ### **Whatsapp Methods**
 To work with WhatsApp, it's important to be able to configure the number in Plazbot. The configuration is done directly with Meta, so there shouldn't be any issues during the process. We can also help you associate the number through our communication channels, such as support@plazbot.com or Discord.
 
-👉 [[(Whatsapp Configuration)](https://plazbot.featurebase.app/en/help/articles/6674271-conectar-numero-de-whatsapp)]
+👉 [[(Whatsapp Configuration)](https://docs.plazbot.com/guides/primeros-pasos/conectar-whatsapp)]
 
 ### Send Whatsapp Message 
 This feature is for sending simple WhatsApp messages. If you want to host a chat on your platform, app, or other site, this feature will allow you to record incoming and outgoing messages. This simple message is used when the conversation with the client is already active. You won't be able to send a simple message if the client is new or hasn't responded to you within 24 hours of your last conversation, or the timeframe they have.
-
-I'm also providing the Meta documentation so you can review how their messaging works, its timing, and rates.
-
-👉 [[(Meta Pricing and Conversation)](https://developers.facebook.com/docs/whatsapp/pricing)]
 
 ```ts
    // Whatsapp message
@@ -407,6 +484,49 @@ Check out our documentation to learn how to create an account and retrieve your 
 
 ---
 
+## 📁 Files API – Add, Validate, and Delete Files
+
+This API allows you to upload files (PDF, DOC, DOCX) and connect them to your AI agent so their content can be processed using Retrieval-Augmented Generation (RAG). Files are analyzed and split into vectorized fragments that can be retrieved during conversation.
+
+---
+
+### ✅ `addFile`
+
+Uploads a file and links it to an AI agent. The file content will be processed and stored as knowledge fragments.
+
+| Field       | Type     | Required | Description |
+|-------------|----------|----------|-------------|
+| `fileUrl`   | `string` | ✅ Yes   | Public URL of the file to upload. Only `.pdf`, `.doc`, `.docx` formats are supported. |
+| `reference` | `string` | ✅ Yes   | A detailed description of the file’s content. Used to decide if the file should be queried. |
+| `agentId`   | `string` | ✅ Yes   | The ID of the agent to associate the file with. |
+
+#### Example
+
+```ts
+const file = await bot.addFile({
+  fileUrl: "https://example.com/docs/contract.pdf",
+  reference: "Service contract between Plazbot and Citra.",
+  agentId: agentId
+});
+
+console.log("📁 File Added:", file);
+
+const validated = await bot.validateFile({
+  fileId: file.id
+});
+
+console.log("✅ File Validated:", validated);
+
+const deleted = await bot.deleteFile({
+  fileId: file.id,
+  agentId: agentId
+});
+
+console.log("🗑️ File Deleted:", deleted);
+
+```
+---
+
 ## Visual Reference
 
 Below are example screenshots of the Portal UI (light and dark mode):
@@ -437,8 +557,6 @@ For use NPM, visit:
 👉 [[(https://www.npmjs.com/package/plazbot)](https://www.npmjs.com/package/plazbot)]
 
 ---
-
----
 ## 🤝 Let’s Build the Future of AI Agents — Together
 
 We’re currently in **Beta** for our new **Plazbot 2.0 SDK** — a platform designed to help developers easily create AI agents for:
@@ -465,14 +583,12 @@ For partnerships, business, or sales inquiries:
 📩 [sales@plazbot.com](mailto:sales@plazbot.com)
 
 Join our community and help us shape what comes next:  
-[![Join Discord](https://img.shields.io/badge/Discord-Join-blue?logo=discord&style=for-the-badge)](https://discord.gg/Y8f38MxF)
+[![Join Discord](https://img.shields.io/badge/Discord-Join-blue?logo=discord&style=for-the-badge)](https://discord.com/invite/SgyAtrwzp7)
 [![Follow on Twitter](https://img.shields.io/badge/Twitter-Follow-1DA1F2?logo=twitter&style=for-the-badge)](https://twitter.com/plazbotia)
 [![Plazbot Dev Docs](https://img.shields.io/badge/Developer%20Docs-plazbot.com-blue?style=for-the-badge&logo=openapi)](https://docs.plazbot.com/api-reference/introduction)
 
 
 Together, let’s simplify and accelerate how AI gets delivered to the world.
-
----
 
 ---
 

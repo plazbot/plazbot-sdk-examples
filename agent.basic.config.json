@@ -1,0 +1,19 @@
+{
+  "name": "Sales Plazbot 3",
+  "description": "Virtual Agent IA assistant of the Dental Clinic Sonrisas",
+  "prompt": "",
+  "zone": "LA",
+  "buffer": 5,
+  "color": "blue",
+  "question": "How can I help you today?",
+  "examples": [
+    { "value": "How to be a partner??", "color": "green" },
+    { "value": "Benefits of being members?", "color": "blue" }
+  ],
+  "person": {
+    "name": "Maximo",
+    "role": "Virtual customer service assistant",
+    "speaksInFirstPerson": true,
+    "isHuman": false
+  }
+}

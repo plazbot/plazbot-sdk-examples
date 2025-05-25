@@ -1,4 +1,10 @@
 import { Agent, Portal, Message } from 'plazbot';
+import fs from 'fs/promises';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const bot = new Agent({
   workspaceId: "[YOUR_WORKSPACE_ID]",
@@ -20,47 +26,48 @@ const message = new Message({
 
 async function main() {
   try {
-    const promptServicioCliente = `
-    You are the Customer Service and Sales Agent at Plazbot. The goal is for you to always respond in a friendly manner, using emoticons, but not too many, just subtly based on the information I'm about to provide. Please don't answer too long. Be precise, but also provide clear information.
 
-    Plazbot is a startup with the sole purpose of providing simple and extremely easy ways to create AI Agents for WhatsApp, AI Search Portals, and also helping programmers create AI Agents to integrate their tools with WhatsApp and Artificial Intelligence.
+    const configAgent = path.join(__dirname, 'agent.basic.config.json');
+    const prompText = path.join(__dirname, 'prompt.txt');
 
-    Plazbot is a startup founded in Peru. Its CEO, Kristian García, founded it in 2021, and over the past few years, we've focused on creating AI Agents and Chatbots for WhatsApp.
+    const configFile = await fs.readFile(configAgent, 'utf-8');
+    const promptContent = await fs.readFile(prompText, 'utf-8');
 
-    We are located in Peru and Spain. The company was also founded in the United States under the name Plazbot LLC.
+    const config = JSON.parse(configFile);
+    config.prompt = promptContent;
 
-    The information we provide is as follows, based on our links:
-    - General platform information: www.plazbot.com
-    - Twitter: https://twitter.com/plazbotia
-    - LinkedIn: https://www.linkedin.com/company/plazbotcrm
-    - Discord: https://discord.gg/SgyAtrwzp7
-    - Development Roadmap: https://plazbot.canny.io/
-    - Changelog: https://docs.plazbot.com/changelog/platform
-    - Documentation: https://docs.plazbot.com/
-    .`;
+    //////////////////////// AGENT /////////////////////////////////
 
-    const agent = await bot.addAgent({
-      name: "Sales Plazbot",
-      prompt: promptServicioCliente,
-      buffer: 5,
-      zone: "LA",
-      color: "orange", // 'orange' | 'blue' | 'green' | 'gray' | 'white';
-      question: "¿How can I help you?",
-      description: "Plazbot Sales and Customer Service Agent",
-    });
-
+    const agent = await bot.addAgent(config);
     const agentId = agent.agentId;
 
-    //Add examples of the agent  
-    await bot.addExample({ id: agentId, example: "Where are they located?", color: "green" });
-    await bot.addExample({ id: agentId, example: "What guarantees do you offer?", color: "blue" });
+    //update Agent
+    const agentUpdated = await bot.updateAgent("agentId", config);
+    console.log("✅ Agent Updated from agent.config.json:", config);
 
-    // Create the portal
+    // Delete Agent
+    await bot.deleteAgent({
+      id: agentId
+    });
+    
+    const result = await bot.enableWidget({ id: agentId, enable: false });
+    console.log("🔧 Widget State:", result);
+
+    // // Get all agents
+    const agents = await bot.getAgents();
+    console.log("🧠 Agentes:", agents);
+
+    // // Get a specific agent by ID
+    const agentById = await bot.getAgentById({ id: agentId });
+    console.log("📌 Agente por ID:", agentById);
+
+    /////////////////////// PORTAL /////////////////////////
+
     const portalCreated = await portal.addPortal({
-      name: "Portal Histórico",
+      name: "Portal Name",
       zone: "LA",
-      title: "Consultas Históricas",
-      subtitle: "Tu fuente de historia confiable",
+      title: "Help to Persons",
+      subtitle: "Your trusted history source",
       logo: "https://storage-files-plz-latam.s3.sa-east-1.amazonaws.com/master/logo-plazbot.png",
       logodark: "https://storage-files-plz-latam.s3.sa-east-1.amazonaws.com/master/logo-plazbot.png",
       access: "direct", // or "form",
@@ -70,20 +77,8 @@ async function main() {
 
      const portalId = portalCreated.id;
      const portalUrl = portalCreated.url;
-
-     // Associate agent to the portal
-    await portal.addAgentToPortal({
-      portalId: portalId,
-      id: agentId
-    });
-
-    //Clear examples of the agent    
-    await bot.clearExamples(agentId);
-
-    // Clear links of the portal
-    await portal.clearLinks(portalId);
-
-
+     
+     console.log("🔗 Portal URL:", portalUrl);
 
     //Add a link to the portal
     await portal.addLinkToPortal({
@@ -92,79 +87,95 @@ async function main() {
       url: "https://www.plazbot.com/Blog"
     });
 
+    //Add a link to the portal
+    await portal.addLinkToPortal({
+      portalId: portalId,
+      value: "Developer Plazbot",
+      url: "https://docs.plazbot.com/api-reference/introduction"
+    });
+
+    //Add a link to the portal
+    await portal.addLinkToPortal({
+      portalId: portalId,
+      value: "Changelog Plazbot",
+      url: "https://docs.plazbot.com/changelog/sdk"
+    });
+
+    //Add a link to the portal
+    await portal.addLinkToPortal({
+      portalId: portalId,
+      value: "Documentacióm Plazbot",
+      url: "https://docs.plazbot.com"
+    });
+
+     //Associate agent to the portal
+    await portal.addAgentToPortal({
+      portalId: portalId,
+      id: agentId
+    });
+    // Clear links of the portal
+    await portal.clearLinks(portalId);
+
     //Get information from the portal
     const portalInfo = await portal.getPortal(portalId);
     console.log("🔍 Portal:", portalInfo);
 
-    // // Get all agents
-    const agents = await bot.getAgents();
-    console.log("🧠 Agentes:", agents);
-
-    // Get a specific agent by ID
-    const agentById = await bot.getAgentById({ id: agentId });
-    console.log("📌 Agente por ID:", agentById);
-
-    // Update agent 
-    await bot.updateAgent({
-      id: agentId, 
-      buffer: 7,
-      color: 'blue',
-    });
-
-    // Update portal
+    //Update portal
     await portal.updatePortal({
-      id: portalId, 
+      id: "portalId", 
       name: "Plazbot Portal Updated"
     });
 
-    
-    // Delete Agent
-    await bot.deleteAgent({
-      id: agentId
-    });
-
-    // Delete portal
+     // Delete portal
     await portal.deletePortal(portalId);
 
+
+    //////////////////////// WHATSAPP /////////////////////////////////
+
     const sessionId = crypto.randomUUID();
-    
-    // 🧠 Query the agent's AI
-    const response = await bot.onMessage({
-      agentId: agentId, 
-      question: "What features does Plazbot have?",
-      sessionId: sessionId
-    });
-
-    console.log("💬 IA Response:", response);
-
-    // Whatsapp message
     const whatsapp = await message.onWhatsappMessage({
       message: "What features does Plazbot have?",
-      to: "52123456789" //"sessionId12345" // sessionId
+      to: "51912345678" 
     });
-     console.log("💬 IA Response:", whatsapp);
 
-    // Send a template message
     const plantilla = await message.onConversation({
-      to: "52123456789", 
-      template: "welcome_plazbot"
+      to: "51912345678", 
+      template: "plantila_plazbot_welcome"
     });
+
 
     await message.registerWebhook({
-      number: '51966446311',
-      webhookUrl: 'https://hook.us1.make.com/xxxxxxxx'
+      number: '51912345678',
+      webhookUrl: 'https://hook.us1.make.com/kkcbwaau8m9w5pedf6dcn26v5wockjv0'
     });
 
 
     await message.deleteWebhook({
-      number: "51966446311"
+      number: "51912345678"
     });
 
-
-    const result = await bot.enableWidget({ id: agentId, enable: true });
-    console.log("🤖 Widget State:", result);
+    ////////////////////////// ADD FILES ///////////////////////////////////
 
 
+    const file = await bot.addFile({
+      fileUrl: "",
+      reference: "detailed reference about the file so that AI can understand its contents.",
+      agentId: agentId
+    });
+
+    console.log("📁 File Added", file);
+
+
+    const validated = await bot.validateFile({
+      fileId: file.id
+    });
+
+    const deleted = await bot.deleteFile({
+      fileId: file.id,
+      agentId: agentId
+    });
+
+    
     console.log("✅ Success.");
 
   } catch (error) {

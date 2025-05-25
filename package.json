@@ -2,8 +2,11 @@
   "name": "plazbot-sdk-examples",
   "version": "1.0.0",
   "description": "AI Agents and WhatsApp for Developers.",
+  "type": "module",
   "main": "index.js",
   "scripts": {
+    "start": "node --loader ts-node/esm index.ts",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,9 +21,11 @@
   },
   "homepage": "https://github.com/plazbot/plazbot-sdk-examples#readme",
   "devDependencies": {
+    "@types/node": "^22.15.21",
+    "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "plazbot": "^1.0.7"
+    "plazbot": "^1.1.0"
   }
 }
