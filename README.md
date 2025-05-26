@@ -231,26 +231,6 @@ Deletes an agent and automatically removes its reference from any associated por
     });
 ```
 
-### Send Message to IA
-Sends a message to the AI agent and receives a streamed response.
-
-🚨 **Importat** - This is the most important function of the SDK. This function will always query the AI. Later, we will implement the RAG for the AI ​​and API services. This will always be the function that asks the AI ​​for what is needed.
-
-If working with WhatsApp, you first query the AI, and then you send the result as a message using the Message module to your client or user.
-
-```ts
-    const sessionId = crypto.randomUUID();
-    
-    // 🧠 Query the agent's AI
-    const response = await bot.onMessage({
-      agentId: agentId, 
-      question: "What features does Plazbot have?",
-      sessionId: sessionId
-    });
-
-    console.log("💬 IA Response:", response);
-```
-
 ### Activate/Desactivate Widget
 Activate your widget for your website immediately with an agent feature. When you activate the Agent field, you'll receive a response with the script so you can install it.
 
@@ -412,7 +392,22 @@ const response = await bot.onMessage({
 });
 
 console.log("💬 IA Response:", respuesta);
+
 ```
+
+🤖 Response Example
+```json
+  {
+    "success": true,
+    "answers": [
+      "✅ Plazbot lets you create AI agents in minutes.",
+      "📂 You can connect them to PDF files, images, and external services.",
+      "🌐 Works with WhatsApp, AI Portals, and Web Widgets.",
+      "🔗 API-ready and fully configurable via JSON schema."
+    ],
+    "fileUsed": "meta.pdf"
+  }
+  ```
 ----
 
 ### **Whatsapp Methods**
