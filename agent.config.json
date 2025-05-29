@@ -1,12 +1,13 @@
 {
-  "name": "Sales Plazbot 3",
-  "description": "Virtual Agent IA assistant of the Dental Clinic Sonrisas",
+  "name": "Sales Clinic",
+  "description": "Virtual Agent IA assistant of the Dental Clinic Smiles",
   "prompt": "",
   "zone": "LA",
-  "buffer": 5,
+  "buffer": 50,
   "color": "blue",
   "question": "How can I help you today?",
   "timezone": "America/Lima",
+  "enable": true,
   "tags": [
     "health",
     "dentistry",
@@ -49,5 +50,29 @@
     "doNotMentionPrices": false,
     "doNotDiagnose": true,
     "doNotRespondOutsideHours": "Our hours are Monday to Saturday, from 8am to 6pm."
-  }
+  },
+   "services": [
+    {
+      "intent": "schedule_date",
+      "reference": "Service for recording patients' medical appointments at the clinic",
+      "enabled": true,
+      "method": "POST",
+      "requiredFields": ["nombre", "email", "fecha"],
+      "endpoint": "https://api.clinic.com/v1/date/schedule",
+      "headers": {
+        "Authorization": "Bearer {{apiKey}}",
+        "Content-Type": "application/json"
+      },
+      "bodyTemplate": {
+        "nombre": "{{nombre}}",
+        "email": "{{email}}", 
+        "fecha": "{{fecha}}"
+      },
+      "responseMapping": {
+        "mensaje": "$.reponse.mensaje",
+        "date": "$.response.date"
+      },
+      "responseMessage": "Tu cita ha sido registrada exitosamente para el {{date}}"
+    }
+  ]
 }

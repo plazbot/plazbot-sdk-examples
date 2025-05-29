@@ -1,6 +1,6 @@
 ## 🚀 Plazbot SDK Examples
 
-Create your AI agents extremely easily, connect them to your files and your prompt, and deploy them wherever you want, whether it's WhatsApp or our tools.
+Create your AI agents extremely easily, connect them to your files, services API and yout prompt, and deploy them wherever you want, whether it's WhatsApp or our tools.
 
 ---
 
@@ -23,20 +23,6 @@ The SDK is designed for developers who want to ship intelligent agents fast — 
 ---
 
 > 🧪 We’re currently in **Beta** for Plazbot SDK 2.0. Join the community and get free months, discounts, and early access perks. [Learn more ↓](#-lets-build-the-future-of-ai-agents--together)
-
----
-
-## 💻 Roadmap
-
-The Plazbot SDK is being developed with a RAG (Retrieval-Augmented Generation) architecture, allowing developers to combine:
-
-- External services via APIs
-- Custom prompts configured in the agent
-
-Our orchestrator will intelligently decide the best source of information to respond to each user message.
-
-Roadmap:
-- APIs for AI Agent
 
 ---
 
@@ -95,61 +81,89 @@ We're also providing a basic file for you to use in the repository.
 
 ```json
   {
-    "name": "Sales Plazbot 3",
-    "description": "Virtual Agent IA assistant of the Dental Clinic Sonrisas",
-    "prompt": "",
-    "zone": "LA",
-    "buffer": 5,
-    "color": "blue",
-    "question": "How can I help you today?",
-    "timezone": "America/Lima",
-    "tags": [
-      "health",
-      "dentistry",
-      "ia",
-      "plazbot"
+  "name": "Sales Clinic",
+  "description": "Virtual Agent IA assistant of the Dental Clinic Smiles",
+  "prompt": "",
+  "zone": "LA",
+  "buffer": 50,
+  "color": "blue",
+  "question": "How can I help you today?",
+  "timezone": "America/Lima",
+  "enable": true,
+  "tags": [
+    "health",
+    "dentistry",
+    "ia",
+    "plazbot"
+  ],
+  "examples": [
+    { "value": "How to be a partner??", "color": "green" },
+    { "value": "Benefits of being members?", "color": "blue" }
+  ],
+  "instructions": {
+    "tone": "professional",
+    "style": "short answers",
+    "personality": "friendly",
+    "objective": "help with clarity",
+    "language": "es-419",
+    "emojis": false,
+    "preferredFormat": "plain text",
+    "maxWords": 80,
+    "avoidTopics": [
+      "laboratory costs",
+      "external claims"
     ],
-    "examples": [
-      { "value": "How to be a partner??", "color": "green" },
-      { "value": "Benefits of being members?", "color": "blue" }
-    ],
-    "instructions": {
-      "tone": "professional",
-      "style": "short answers",
-      "personality": "friendly",
-      "objective": "help with clarity",
-      "language": "es-419",
-      "emojis": false,
-      "preferredFormat": "plain text",
-      "maxWords": 80,
-      "avoidTopics": [
-        "laboratory costs",
-        "external claims"
-      ],
-      "respondOnlyIfKnows": true,
-      "maintainToneBetweenMessages": true,
-      "greeting": "Hello, I am Maximo"
-    },
-    "person": {
-      "name": "Maximo",
-      "role": "Virtual customer service assistant",
-      "speaksInFirstPerson": true,
-      "isHuman": false
-    },
-    "fallbacks": {
-      "noAnswer": "Sorry, I don't have information on that topic.",
-      "serviceError": "There was a problem processing your request. Please try again later.",
-      "doNotUnderstand": "Could you please repeat it in another way?"
-    },
-    "rules": {
-      "doNotMentionPrices": false,
-      "doNotDiagnose": true,
-      "doNotRespondOutsideHours": "Our hours are Monday to Saturday, from 8am to 6pm."
+    "respondOnlyIfKnows": true,
+    "maintainToneBetweenMessages": true,
+    "greeting": "Hello, I am Maximo"
+  },
+  "person": {
+    "name": "Maximo",
+    "role": "Virtual customer service assistant",
+    "speaksInFirstPerson": true,
+    "isHuman": false
+  },
+  "fallbacks": {
+    "noAnswer": "Sorry, I don't have information on that topic.",
+    "serviceError": "There was a problem processing your request. Please try again later.",
+    "doNotUnderstand": "Could you please repeat it in another way?"
+  },
+  "rules": {
+    "doNotMentionPrices": false,
+    "doNotDiagnose": true,
+    "doNotRespondOutsideHours": "Our hours are Monday to Saturday, from 8am to 6pm."
+  },
+   "services": [
+    {
+      "intent": "schedule_date",
+      "reference": "Service for recording patients' medical appointments at the clinic",
+      "enabled": true,
+      "method": "POST",
+      "requiredFields": ["nombre", "email", "fecha"],
+      "endpoint": "https://api.clinic.com/v1/date/schedule",
+      "headers": {
+        "Authorization": "Bearer {{apiKey}}",
+        "Content-Type": "application/json"
+      },
+      "bodyTemplate": {
+        "nombre": "{{nombre}}",
+        "email": "{{email}}", 
+        "fecha": "{{fecha}}"
+      },
+      "responseMapping": {
+        "mensaje": "$.reponse.mensaje",
+        "date": "$.response.date"
+      },
+      "responseMessage": "Your appointment has been successfully registered for the {{date}}"
     }
-  }
+  ]
+}
 ```
+
 **AI Agent Fields**
-👉🏼 The JSON obeys a preconfigured schema, so the field names and types must be respected.
+
+👉 The JSON obeys a preconfigured schema, so the field names and types must be respected.
+
 
 | Name            | Description |
 |-----------------|-------------|
@@ -163,7 +177,7 @@ We're also providing a basic file for you to use in the repository.
 | timezone        | Field to define the agent's time zone, this is important if you want your agent to work with Business Hours and know how to respond. [TimeZone Formats](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) |
 | Examples        | Adds a quick reply example to the agent. Maximum: 5. |
 | Tags            | Tags are for when you have many agents within the company and can be classified. |
-| Tags            | Tags are for when you have many agents within the company and can be classified. |
+| Enable          | Field where the agent is activated or deactivated |
 
 | Field                                | Description |
 |--------------------------------------|-------------|
@@ -189,6 +203,24 @@ We're also providing a basic file for you to use in the repository.
 | rules.doNotMentionPrices             | Prevents the agent from discussing prices. Boolean value. |
 | rules.doNotDiagnose                  | If true, disables medical/technical diagnosis by the agent. |
 | rules.doNotRespondOutsideHours       | Business hours in plain text (e.g., `"Monday to Friday 9am to 6pm"`). Agent may decline to respond outside of these hours. **Work with `timezone` field**. |
+
+With the Services field, you can connect to different platforms based on your needs.
+
+Plazbot responds based on intent; you must configure the service with its reference so the AI ​​can understand what it needs to execute. The reference is important, but not too long; it should be short and concise.
+
+| Field             | Description |
+|------------------|-------------|
+| intent           | The unique identifier for the service intent. It's used to detect what the user is requesting (e.g., "schedule_appointment"). |
+| reference        | A short, descriptive sentence that helps the AI understand when this service should be triggered. Example: "Service to reserve medical appointments". |
+| enabled          | Boolean that indicates whether this service is active (`true`) or not (`false`). |
+| method           | HTTP method used to call the external API (`GET`, `POST`, etc.). |
+| endpoint         | Full URL to the API you want to call when the intent is triggered. |
+| headers          | An object with key-value pairs to include custom HTTP headers like `Authorization`. |
+| requiredFields   | Array of strings indicating which user inputs are required before the service can be executed (e.g., `["name", "email"]`). |
+| bodyTemplate     | Object used to construct the request body. It supports template interpolation like `{{email}}`, `{{name}}`. |
+| responseMapping  | Defines how to extract data from the API response (e.g., `"mensaje": "$.response.message"`). |
+| responseMessage  | The message the agent should return to the user after a successful service execution. You can use placeholders like `{{date}}`. |
+
 
 ### 🌐 Language Codes for AI Agent
 
@@ -405,7 +437,7 @@ console.log("💬 IA Response:", respuesta);
       "🌐 Works with WhatsApp, AI Portals, and Web Widgets.",
       "🔗 API-ready and fully configurable via JSON schema."
     ],
-    "fileUsed": "meta.pdf"
+    "fileName": "meta.pdf"
   }
   ```
 ----
@@ -498,7 +530,8 @@ Uploads a file and links it to an AI agent. The file content will be processed a
 ```ts
 const file = await bot.addFile({
   fileUrl: "https://example.com/docs/contract.pdf",
-  reference: "Service contract between Plazbot and Citra.",
+  reference: "Service contract between Plazbot and Supplier.",
+  tags: ['contract','','agreements'],
   agentId: agentId
 });
 
@@ -593,12 +626,12 @@ While pricing is still under review, **Plazbot is currently 100% free** during t
 
 ### 🧪 Planned Pricing (Post-Beta)
 
-| Plan             | Users | Contacts        | Monthly | Annual (Discount) |
-|------------------|--------|-----------------|---------|--------------------|
-| Free             | 1      | 500             | $0      | $0                 |
-| Professional     | 5      | 5,000           | $25     | $19/mo             |
-| Business         | 10     | 10,000          | $35     | $29/mo             |
-| Corporate        | Custom | Custom needs    | Custom  | Custom             |
+| Plan             | Users  | Contacts      | Agents    | Monthly | Annual (Discount) |
+|------------------|--------|---------------|-----------|---------|--------------------|
+| Free             | 1      | 500           | 2 Agents  | $0      | $0                 |
+| Professional     | 5      | 5,000         | 10        | $25     | $19/mo             |
+| Business         | 10     | 10,000        | Ilimitate | $35     | $29/mo             |
+| Corporate        | Custom | Custom needs  | Ilimitate | Custom  | Custom             |
 
 > Additional User: **$10/month**  
 > Extra Contacts:  

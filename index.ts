@@ -160,6 +160,7 @@ async function main() {
     const file = await bot.addFile({
       fileUrl: "",
       reference: "detailed reference about the file so that AI can understand its contents.",
+      tags: ['whatsapp','pricing','conversations'],
       agentId: agentId
     });
 

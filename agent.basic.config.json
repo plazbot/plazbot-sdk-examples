@@ -1,10 +1,11 @@
 {
-  "name": "Sales Plazbot 3",
+  "name": "Sales Plazbot",
   "description": "Virtual Agent IA assistant of the Dental Clinic Sonrisas",
   "prompt": "",
   "zone": "LA",
   "buffer": 5,
   "color": "blue",
+  "enable": true,
   "question": "How can I help you today?",
   "examples": [
     { "value": "How to be a partner??", "color": "green" },
