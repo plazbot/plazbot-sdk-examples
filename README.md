@@ -213,7 +213,7 @@ Plazbot responds based on intent; you must configure the service with its refere
 | intent           | The unique identifier for the service intent. It's used to detect what the user is requesting (e.g., "schedule_appointment"). |
 | reference        | A short, descriptive sentence that helps the AI understand when this service should be triggered. Example: "Service to reserve medical appointments". |
 | enabled          | Boolean that indicates whether this service is active (`true`) or not (`false`). |
-| method           | HTTP method used to call the external API (`GET`, `POST`, etc.). |
+| method           | HTTP method used to call the external API (`GET`, `POST`. No other request is possible at the moment). |
 | endpoint         | Full URL to the API you want to call when the intent is triggered. |
 | headers          | An object with key-value pairs to include custom HTTP headers like `Authorization`. |
 | requiredFields   | Array of strings indicating which user inputs are required before the service can be executed (e.g., `["name", "email"]`). |
