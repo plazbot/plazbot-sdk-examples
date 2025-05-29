@@ -59,6 +59,7 @@
       "method": "POST",
       "requiredFields": ["nombre", "email", "fecha"],
       "endpoint": "https://api.clinic.com/v1/date/schedule",
+      "tags": ["appointment","date","booking"],
       "headers": {
         "Authorization": "Bearer {{apiKey}}",
         "Content-Type": "application/json"
