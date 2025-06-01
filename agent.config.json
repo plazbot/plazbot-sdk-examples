@@ -57,7 +57,27 @@
       "reference": "Service for recording patients' medical appointments at the clinic",
       "enabled": true,
       "method": "POST",
-      "requiredFields": ["nombre", "email", "fecha"],
+      "requiredFields": [ 
+        { 
+          "name": "name_contact", 
+          "description": "Name of the person who wants to schedule the meeting.",
+          "promptHint": "¿Could you tell me your full name, please??",
+          "type": "string"
+        },
+        { 
+          "name": "email",
+          "description": "Email of the person who wants to schedule the meeting.",
+          "promptHint": "¿What is your email address for the appointment?",
+          "type": "string"
+          
+        },
+        { 
+          "name": "date",
+          "description": "Preferred date and time for the meeting.",
+          "promptHint": "¿What day and time would be good for you for the meeting??",
+          "type": "date"
+        }
+      ],
       "endpoint": "https://api.clinic.com/v1/date/schedule",
       "tags": ["appointment","date","booking"],
       "headers": {
@@ -65,15 +85,15 @@
         "Content-Type": "application/json"
       },
       "bodyTemplate": {
-        "nombre": "{{nombre}}",
-        "email": "{{email}}", 
-        "fecha": "{{fecha}}"
+        "name_body": "{{name}}",
+        "email_body": "{{email}}", 
+        "date_body": "{{fecha|format('yyyy-MM-dd')}}"
       },
       "responseMapping": {
-        "mensaje": "$.reponse.mensaje",
+        "mensaje": "$.reponse.message",
         "date": "$.response.date"
       },
-      "responseMessage": "Tu cita ha sido registrada exitosamente para el {{date}}"
+      "responseMessage": "Your appointment has been successfully registered for the {{date}}"
     }
   ]
 }
