@@ -156,6 +156,9 @@ We're also providing a basic file for you to use in the repository.
       },
       "responseMessage": "Your appointment has been successfully registered for the {{date}}"
     }
+  ],
+  "channels": [
+    { "channel": "whatsapp", "key": "123456789" }
   ]
 }
 ```
