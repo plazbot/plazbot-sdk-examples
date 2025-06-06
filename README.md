@@ -139,16 +139,33 @@ We're also providing a basic file for you to use in the repository.
       "reference": "Service for recording patients' medical appointments at the clinic",
       "enabled": true,
       "method": "POST",
-      "requiredFields": ["nombre", "email", "fecha"],
+      "requiredFields": [ 
+        { 
+          "name": "name_person", 
+          "description": "Name of the person who wants to schedule the meeting.",
+          "promptHint": "¿Could you tell me your full name, please?"
+          
+        },
+        { 
+          "name": "email_person",
+          "description": "Email of the person who wants to schedule the meeting.",
+          "promptHint": "¿What is your email address for the appointment?"
+        },
+        { 
+          "name": "date",
+          "description": "Preferred date and time for the meeting.",
+          "promptHint": "¿What day and time would be good for you for the meeting?"
+        }
+      ],
       "endpoint": "https://api.clinic.com/v1/date/schedule",
       "headers": {
         "Authorization": "Bearer {{apiKey}}",
         "Content-Type": "application/json"
       },
       "bodyTemplate": {
-        "nombre": "{{nombre}}",
-        "email": "{{email}}", 
-        "fecha": "{{fecha}}"
+        "nombre": "{{name_person}}",
+        "email": "{{email_person}}", 
+        "fecha": "{{date}}"
       },
       "responseMapping": {
         "mensaje": "$.reponse.mensaje",
