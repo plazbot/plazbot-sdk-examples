@@ -80,16 +80,17 @@ You can train the agent however you need, either through our configurator or if 
 We're also providing a basic file for you to use in the repository.
 
 ```json
-  {
+ {
   "name": "Sales Clinic",
   "description": "Virtual Agent IA assistant of the Dental Clinic Smiles",
   "prompt": "",
   "zone": "LA",
-  "buffer": 50,
+  "buffer": 20,
   "color": "blue",
   "question": "How can I help you today?",
   "timezone": "America/Lima",
   "enable": true,
+  "showInChat": true,
   "tags": [
     "health",
     "dentistry",
@@ -141,20 +142,23 @@ We're also providing a basic file for you to use in the repository.
       "method": "POST",
       "requiredFields": [ 
         { 
-          "name": "name_person", 
+          "name": "name_contact", 
           "description": "Name of the person who wants to schedule the meeting.",
-          "promptHint": "¿Could you tell me your full name, please?"
-          
+          "promptHint": "¿Could you tell me your full name, please??",
+          "type": "string"
         },
         { 
-          "name": "email_person",
+          "name": "email",
           "description": "Email of the person who wants to schedule the meeting.",
-          "promptHint": "¿What is your email address for the appointment?"
+          "promptHint": "¿What is your email address for the appointment?",
+          "type": "string"
+          
         },
         { 
           "name": "date",
           "description": "Preferred date and time for the meeting.",
-          "promptHint": "¿What day and time would be good for you for the meeting?"
+          "promptHint": "¿What day and time would be good for you for the meeting??",
+          "type": "date"
         }
       ],
       "endpoint": "https://api.clinic.com/v1/date/schedule",
@@ -163,15 +167,48 @@ We're also providing a basic file for you to use in the repository.
         "Content-Type": "application/json"
       },
       "bodyTemplate": {
-        "nombre": "{{name_person}}",
-        "email": "{{email_person}}", 
-        "fecha": "{{date}}"
+        "nombre": "{{nombre}}",
+        "email": "{{email}}", 
+        "fecha": "{{fecha}}"
       },
       "responseMapping": {
         "mensaje": "$.reponse.mensaje",
         "date": "$.response.date"
       },
-      "responseMessage": "Your appointment has been successfully registered for the {{date}}"
+      "responseMessage": "Your appointment has been successfully registered for the {{date}}",
+      "action": "human_conversation"
+    }
+  ],
+  "actions":[
+    {
+      "intent": "human_conversation",
+      "reference": "Information when a user wants to talk to a human agent.",
+      "tags": ["conversacion", "humano", "agente"],
+      "enabled": true,
+      "responseMessage": "Please wait a moment while we connect with a human agent.",
+      "responseJson": false,
+      "action": [
+          {
+            "type": "action.asign",
+            "value": "k@gmail.com"
+          },
+          {
+            "type": "action.stage",
+            "value": "agendado"
+          },
+          {
+            "type": "action.agentShutDown",
+            "value": "true"
+          },
+          {
+            "type": "action.segmentation",
+            "value": "segmentacion1"
+          },
+          {
+            "type": "action.tag",
+            "value": "pendiente"
+          }
+      ]
     }
   ],
   "channels": [
