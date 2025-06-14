@@ -675,28 +675,6 @@ Together, let’s simplify and accelerate how AI gets delivered to the world.
 
 ---
 
-## 💸 Release, Pricing & Beta Benefits
-
-Plazbot 2.0 is currently in **Beta**, and we’re working closely with early adopters to improve the platform.
-
-While pricing is still under review, **Plazbot is currently 100% free** during this beta period.
-
-### 🧪 Planned Pricing (Post-Beta)
-
-| Plan             | Users  | Contacts      | Agents    | Monthly | Annual (Discount) |
-|------------------|--------|---------------|-----------|---------|--------------------|
-| Free             | 1      | 500           | 2 Agents  | $0      | $0                 |
-| Professional     | 5      | 5,000         | 10        | $25     | $19/mo             |
-| Business         | 10     | 10,000        | Ilimitate | $35     | $29/mo             |
-| Corporate        | Custom | Custom needs  | Ilimitate | Custom  | Custom             |
-
-> Additional User: **$10/month**  
-> Extra Contacts:  
-> – +10,000 → $49/mo  
-> – +25,000 → $99/mo  
-> – +50,000 → $149/mo  
-> – +100,000 → $249/mo
-
 ### 🤖 SDK Licensing
 
 Because the SDK makes use of RAG architecture, embeddings, prompt execution and external services, it will likely be included in the **paid plans** — although this is still under evaluation.
