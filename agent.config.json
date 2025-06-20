@@ -1,13 +1,14 @@
 {
   "name": "Sales Clinic",
   "description": "Virtual Agent IA assistant of the Dental Clinic Smiles",
-  "prompt": "",
+  "prompt": "You are a professional virtual assistant for Dental Clinic Smiles. You help patients with appointments, general information, and guide them through our services. Always be friendly, professional, and helpful. If you don't know something specific, direct them to contact our staff directly.",
   "zone": "LA",
   "buffer": 50,
   "color": "blue",
   "question": "How can I help you today?",
   "timezone": "America/Lima",
   "enable": true,
+  "showInChat": true,
   "tags": [
     "health",
     "dentistry",
@@ -16,7 +17,9 @@
   ],
   "examples": [
     { "value": "How to be a partner??", "color": "green" },
-    { "value": "Benefits of being members?", "color": "blue" }
+    { "value": "Benefits of being members?", "color": "blue" },
+    { "value": "Schedule an appointment", "color": "orange" },
+    { "value": "What services do you offer?", "color": "gray" }
   ],
   "instructions": {
     "tone": "professional",
@@ -51,7 +54,11 @@
     "doNotDiagnose": true,
     "doNotRespondOutsideHours": "Our hours are Monday to Saturday, from 8am to 6pm."
   },
-   "services": [
+  "enableWidget": true,
+  "darkWidget": false,
+  "nameWidget": "Dental Clinic Assistant",
+  "initialShowWidget": false,
+  "services": [
     {
       "intent": "schedule_date",
       "reference": "Service for recording patients' medical appointments at the clinic",
@@ -59,41 +66,111 @@
       "method": "POST",
       "requiredFields": [ 
         { 
-          "name": "name_contact", 
-          "description": "Name of the person who wants to schedule the meeting.",
-          "promptHint": "¿Could you tell me your full name, please??",
+          "name": "nombre", 
+          "description": "Nombre de la persona que quiere agendar la reunion.",
+          "promptHint": "¿Podrías indicarme tu nombre completo, por favor?",
           "type": "string"
         },
         { 
           "name": "email",
-          "description": "Email of the person who wants to schedule the meeting.",
-          "promptHint": "¿What is your email address for the appointment?",
-          "type": "string"
-          
+          "description": "Correo electrónico de la personsa que quiere agendar la reunion.",
+          "promptHint": "¿Cuál es tu dirección de correo electrónico para la cita?",
+          "type": "email"
         },
         { 
-          "name": "date",
-          "description": "Preferred date and time for the meeting.",
-          "promptHint": "¿What day and time would be good for you for the meeting??",
+          "name": "fecha",
+          "description": "Fecha y hora preferida para la reunion.",
+          "promptHint": "¿Qué día y hora te vendría bien para la reunión?",
           "type": "date"
         }
       ],
       "endpoint": "https://api.clinic.com/v1/date/schedule",
-      "tags": ["appointment","date","booking"],
+      "tags": ["appointment", "date", "booking"],
       "headers": {
         "Authorization": "Bearer {{apiKey}}",
         "Content-Type": "application/json"
       },
       "bodyTemplate": {
-        "name_body": "{{name}}",
-        "email_body": "{{email}}", 
-        "date_body": "{{fecha|format('yyyy-MM-dd')}}"
+        "nombre": "{{nombre}}",
+        "email": "{{email}}", 
+        "fecha": "{{fecha}}"
       },
       "responseMapping": {
-        "mensaje": "$.reponse.message",
+        "mensaje": "$.response.mensaje",
         "date": "$.response.date"
       },
-      "responseMessage": "Your appointment has been successfully registered for the {{date}}"
+      "responseMessage": "Tu cita ha sido registrada exitosamente para el {{date}}",
+      "responseConditions": [
+        {
+          "condition": "$.response.status == 'success'",
+          "message": "¡Perfecto! Tu cita ha sido confirmada para el {{date}}. Te enviaremos un recordatorio por email."
+        },
+        {
+          "condition": "$.response.status == 'conflict'",
+          "message": "Lo siento, ese horario ya está ocupado. ¿Te gustaría elegir otra fecha?"
+        }
+      ],
+      "action": "schedule"
+    },
+    {
+      "intent": "get_services",
+      "reference": "Get list of available dental services",
+      "enabled": true,
+      "method": "GET",
+      "requiredFields": [],
+      "endpoint": "https://api.clinic.com/v1/services",
+      "tags": ["services", "information"],
+      "headers": {
+        "Authorization": "Bearer {{apiKey}}",
+        "Content-Type": "application/json"
+      },
+      "responseMapping": {
+        "services": "$.data.services"
+      },
+      "responseMessage": "Here are our available services: {{services}}"
     }
+  ],
+  "actions": [
+    {
+      "intent": "transfer_to_human",
+      "reference": "Transfer conversation to human agent",
+      "tags": ["support", "human"],
+      "enabled": true,
+      "responseMessage": "I'm transferring you to one of our human specialists who can better assist you.",
+      "responseJson": false,
+      "action": [
+        {
+          "type": "action.asign",
+          "value": "human-agent-id"
+        },
+        {
+          "type": "action.tag",
+          "value": "needs-human-support"
+        }
+      ]
+    },
+    {
+      "intent": "set_urgent_priority",
+      "reference": "Mark conversation as urgent",
+      "tags": ["urgent", "priority"],
+      "enabled": true,
+      "responseMessage": "I've marked your case as urgent. Our team will prioritize your request.",
+      "responseJson": false,
+      "action": [
+        {
+          "type": "action.stage",
+          "value": "urgent-stage-id"
+        },
+        {
+          "type": "action.tag",
+          "value": "urgent"
+        }
+      ]
+    }
+  ],
+  "channels": [
+    { "channel": "whatsapp", "key": "57123456789" },
+    { "channel": "instagram", "key": "dental_clinic_smiles" },
+    { "channel": "facebook", "key": "dental.clinic.smiles" }
   ]
 }
