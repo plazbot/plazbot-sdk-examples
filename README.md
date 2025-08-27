@@ -351,6 +351,14 @@ Fetches details of a specific agent by ID.
     console.log("📌 Agent by ID:", agentById);
 ```
 
+### Copy Agent By Id
+Make your agent's copy
+
+```ts
+   const copyAgent = await bot.copyAgent({ id: agentId });
+    console.log("📌 Agent copied:", copyAgent);
+```
+
 ### Delete Agent
 Deletes an agent and automatically removes its reference from any associated portals.
 

@@ -59,7 +59,10 @@ async function main() {
 
     // // Get a specific agent by ID
     const agentById = await bot.getAgentById({ id: agentId });
-    console.log("📌 Agente por ID:", agentById);
+    console.log("📌 Agent by ID:", agentById);
+
+    const copyAgent = await bot.copyAgent({ id: agentId });
+    console.log("📌 Agent copied:", copyAgent);
 
     /////////////////////// PORTAL /////////////////////////
 
