@@ -74,6 +74,7 @@ async function main() {
       logo: "https://storage-files-plz-latam.s3.sa-east-1.amazonaws.com/master/logo-plazbot.png",
       logodark: "https://storage-files-plz-latam.s3.sa-east-1.amazonaws.com/master/logo-plazbot.png",
       access: "direct", // or "form",
+      theme: "light", // Theme of the portal: "light" or "dark"
       disabled: false, // Disable the portal
       brandOff: false, // Disable the plazbot brand
     });

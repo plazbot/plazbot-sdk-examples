@@ -410,6 +410,7 @@ Creates a new portal with UI configuration (title, subtitle, branding, etc.).
       logo: "https://storage-files-plz-latam.s3.sa-east-1.amazonaws.com/master/logo-plazbot.png",
       logodark: "https://storage-files-plz-latam.s3.sa-east-1.amazonaws.com/master/logo-plazbot.png",
       access: "direct", // or "form",
+      theme: "light", // or "dark"
       disabled: false, // Disable the portal
       brandOff: false, // Disable the plazbot brand
     });
@@ -429,6 +430,7 @@ Creates a new portal with UI configuration (title, subtitle, branding, etc.).
 | logo            | Logo that appears in the upper left section when in light mode. |
 | logodark        | Logo that appears in the upper left section when in dark mode. |
 | access          | This is the way to access the portal: form / direct. Currently, we recommend working with direct, as we're still developing the "form" mode. If you need any functionality, please don't forget to leave it in our feedback section. |
+| theme          | Field to declare the portal theme, whether it is light or dark. |
 | disabled        | Field that deactivates and activates the portal. |
 | brandOff        | Field that hides the Plazbot greeting at the bottom of the portal. |
 | zone            | The zone is a very important factor; it must match the zone in which the account is created. It can be of two types: LA /EU (Latam/Europe). |
