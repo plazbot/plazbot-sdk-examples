@@ -1,0 +1,66 @@
+# Dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Package managers
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+build/
+out/
+*.tsbuildinfo
+
+# Runtime files
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# TypeScript
+*.tsbuildinfo
+
+# Temporary folders
+tmp/
+temp/
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+
+# Configuration files with sensitive data
+config.json
+config.development.json
+config.production.json
+
+# Test results
+test-results/
+junit.xml
+
+# Compiled JavaScript files (if you want to keep only TypeScript)
+# Uncomment if you don't want to commit compiled JS files
+# *.js
+# *.js.map
