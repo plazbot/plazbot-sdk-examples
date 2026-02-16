@@ -733,7 +733,6 @@ import type {
 - [API Reference](https://docs.plazbot.com/api-reference/introduction)
 - [Changelog](https://docs.plazbot.com/changelog/sdk)
 - [Blog](https://www.plazbot.com/blog)
-- [Product Roadmap](https://plazbot.canny.io)
 
 ---
 
