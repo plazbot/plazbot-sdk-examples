@@ -385,7 +385,18 @@ Agents can call external APIs and execute internal actions based on user intent.
       "requiredFields": [
         { "name": "nombre", "type": "string", "promptHint": "What's your name?" },
         { "name": "email", "type": "email", "promptHint": "What's your email?" },
-        { "name": "fecha", "type": "date", "promptHint": "When would you like to schedule?" }
+        { "name": "fecha", "type": "date", "promptHint": "When would you like to schedule?" },
+        {
+          "name": "numeros_a_portar",
+          "type": "arrayObject",
+          "description": "List of phone numbers to port",
+          "promptHint": "Which numbers do you want to port? I need: plan type, carrier, and number.",
+          "properties": [
+            { "name": "plan_type", "type": "string" },
+            { "name": "carrier", "type": "string" },
+            { "name": "number", "type": "string" }
+          ]
+        }
       ],
       "headers": {
         "Authorization": "Bearer {{apiKey}}",
@@ -413,9 +424,53 @@ Agents can call external APIs and execute internal actions based on user intent.
 | `method` | `GET` or `POST` |
 | `endpoint` | External API URL |
 | `requiredFields` | Fields the agent must collect from the user |
+| `requiredFields[].properties` | Sub-properties for `arrayObject` type fields |
 | `bodyTemplate` | Request body with `{{field}}` interpolation |
 | `responseMapping` | Extract data from API response (JSONPath) |
 | `responseConditions` | Conditional responses based on API result |
+
+### Required Field Types
+
+| Type | Description | Example Value |
+|------|-------------|---------------|
+| `string` | Free text | `"John Doe"` |
+| `email` | Valid email address | `"user@email.com"` |
+| `phone` | Phone number | `"+51987654321"` |
+| `date` | Date (AI-normalized) | `"2024-03-15"` |
+| `datetime` | Date and time | `"2024-03-15 14:30"` |
+| `number` | Decimal number | `99.99` |
+| `integer` | Whole number | `42` |
+| `boolean` | True or false | `true` |
+| `array` | Array of strings | `["value1", "value2"]` |
+| `arrayObject` | Array of objects | `[{"field": "value"}]` |
+
+#### `arrayObject` - Array of Objects
+
+Use `arrayObject` when you need the user to provide a **list of items with multiple attributes**. Define sub-properties with `name` and `type`:
+
+```json
+{
+  "name": "items_to_order",
+  "type": "arrayObject",
+  "description": "List of items the customer wants to order",
+  "promptHint": "What items do you want to order? I need product name, quantity, and size.",
+  "properties": [
+    { "name": "product", "type": "string" },
+    { "name": "quantity", "type": "integer" },
+    { "name": "size", "type": "string" }
+  ]
+}
+```
+
+The AI will collect data and produce:
+```json
+[
+  { "product": "T-Shirt", "quantity": 2, "size": "M" },
+  { "product": "Hoodie", "quantity": 1, "size": "L" }
+]
+```
+
+**Supported sub-property types:** `string`, `number`, `integer`, `boolean`
 
 ### Actions (Internal Operations)
 

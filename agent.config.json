@@ -113,6 +113,64 @@
       "action": "schedule"
     },
     {
+      "intent": "portability_request",
+      "reference": "Service to process phone number portability requests from the customer",
+      "enabled": true,
+      "method": "POST",
+      "requiredFields": [
+        {
+          "name": "nombre_titular",
+          "description": "Nombre completo del titular de la línea",
+          "promptHint": "¿Cuál es el nombre completo del titular de la línea?",
+          "type": "string"
+        },
+        {
+          "name": "documento",
+          "description": "Número de documento de identidad del titular",
+          "promptHint": "¿Cuál es tu número de documento de identidad?",
+          "type": "string"
+        },
+        {
+          "name": "numeros_a_portar",
+          "description": "Lista de números telefónicos que el cliente desea portar con su tipo de plan, operador actual y número",
+          "promptHint": "¿Cuáles son los números que deseas portar? Por cada número necesito: tipo de plan, operador actual y el número.",
+          "type": "arrayObject",
+          "properties": [
+            { "name": "tipo_de_plan", "type": "string" },
+            { "name": "operador", "type": "string" },
+            { "name": "numero", "type": "string" }
+          ]
+        }
+      ],
+      "endpoint": "https://api.telco.com/v1/portability/request",
+      "tags": ["portability", "phone", "transfer"],
+      "headers": {
+        "Authorization": "Bearer {{apiKey}}",
+        "Content-Type": "application/json"
+      },
+      "bodyTemplate": {
+        "titular": "{{nombre_titular}}",
+        "documento": "{{documento}}",
+        "numeros": "{{numeros_a_portar}}"
+      },
+      "responseMapping": {
+        "solicitud_id": "$.data.request_id",
+        "estado": "$.data.status"
+      },
+      "responseMessage": "Tu solicitud de portabilidad ha sido registrada. ID: {{solicitud_id}}",
+      "responseConditions": [
+        {
+          "condition": "$.data.status == 'accepted'",
+          "message": "¡Perfecto! Tu solicitud de portabilidad ha sido aceptada. ID: {{solicitud_id}}. El proceso tomará entre 24-48 horas."
+        },
+        {
+          "condition": "$.data.status == 'rejected'",
+          "message": "Lo siento, la solicitud fue rechazada. Por favor verifica que los datos sean correctos e intenta nuevamente."
+        }
+      ],
+      "action": ""
+    },
+    {
       "intent": "get_services",
       "reference": "Get list of available dental services",
       "enabled": true,
