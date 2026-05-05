@@ -218,6 +218,67 @@ console.log(response.answer);
 | `.pdf` | Yes (embedded text or scanned images) |
 | `.docx`, `.xlsx` | No |
 
+### Streaming SSE (Server-Sent Events)
+
+Send `stream: true` to receive the response as a real-time stream of tokens instead of waiting for the complete response. Requires the agent to have `useToolCalling: true` (enabled by default for new agents).
+
+```ts
+const response = await fetch('https://api.plazbot.com/api/agent/on-message', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_API_KEY',
+    'x-workspace-id': 'YOUR_WORKSPACE_ID'
+  },
+  body: JSON.stringify({
+    agentId: agentId,
+    question: "What features does Plazbot have?",
+    sessionId: "unique-session-id",
+    stream: true
+  })
+});
+
+const reader = response.body.getReader();
+const decoder = new TextDecoder();
+let buffer = '';
+
+while (true) {
+  const { done, value } = await reader.read();
+  if (done) break;
+
+  buffer += decoder.decode(value, { stream: true });
+  const lines = buffer.split('\n');
+  buffer = lines.pop() || '';
+
+  for (const line of lines) {
+    if (!line.startsWith('data: ')) continue;
+    const chunk = JSON.parse(line.substring(6));
+
+    if (chunk.type === 'text') {
+      process.stdout.write(chunk.content); // Print tokens as they arrive
+    } else if (chunk.type === 'tool_call') {
+      console.log(`\nExecuting: ${chunk.tool_name}...`);
+    } else if (chunk.type === 'done') {
+      console.log(`\nTokens: ${chunk.input_tokens} in / ${chunk.output_tokens} out`);
+    }
+  }
+}
+```
+
+**SSE Chunk Types:**
+
+| Type | Description |
+|------|-------------|
+| `text` | Partial text token (`content` field) |
+| `tool_call` | Agent is executing a tool (`tool_name` field) |
+| `tool_result` | Tool execution completed |
+| `done` | Stream finished (`input_tokens`, `output_tokens`, `estimated_cost`) |
+| `error` | Error occurred (`error` field) |
+
+**Supported providers:** OpenAI, Claude (Anthropic), Gemini (Google)
+
+> **Note:** The `stream` parameter is optional and defaults to `false`. Existing clients are not affected.
+
 ### Widget
 
 Enable the embeddable web widget for an agent:
